@@ -41,6 +41,7 @@ public class BridgeNewWhitelistCheck {
         HttpURLConnection connection;
         URL url = new URL("http://192.168.86.23/api/yVqFoICUnIFDpxpGUCmXnHtAnv2sd1DJJ5LLHcGo/config");
         connection = (HttpURLConnection)url.openConnection();
+
         connection.connect();
         InputStream stream = connection.getInputStream();
 
