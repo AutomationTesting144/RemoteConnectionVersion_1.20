@@ -47,7 +47,6 @@ public class BridgeNewWhitelistCheck {
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
         StringBuffer br = new StringBuffer();
-
         String line = " ";
         while((line = reader.readLine())!=null){
             br.append(line);
