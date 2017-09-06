@@ -15,8 +15,8 @@ import java.net.URL;
  */
 
 public class APIVersion {
-    public String IPAddress = "192.168.86.23/api";
-    public String HueUserName = "yVqFoICUnIFDpxpGUCmXnHtAnv2sd1DJJ5LLHcGo";
+    public String IPAddress = "192.168.1.131/api";
+    public String HueUserName = "MnmoqKgwvdO2GrdVZ1TTHSyVN5amy4W6uuJcTbEF";
     public String HueBridgeParameterType = "config";
     //public String HueBridgeIndLightType = "lights";
     public String finalURL;

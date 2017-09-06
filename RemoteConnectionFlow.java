@@ -5,17 +5,25 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import io.appium.java_client.android.AndroidDriver;
@@ -29,13 +37,53 @@ public class RemoteConnectionFlow {
     public String Comments;
     public String ActualResult;
     public String ExpectedResult;
-    String whiteListString;
-    String [] parts ;
-    int counter=0;
-    String iftttSubString;
-    String url;
+    public String whiteListString;
+    public String [] parts ;
+    public int counter=0;
+    public String WLname;
+    public boolean ob3;
 
     public void remoteConnection(AndroidDriver driver, String fileName, String APIVersion, String SWVersion) throws IOException, JSONException, InterruptedException {
+        //Before making new connection, all the whitelist for IFTTT should be deleted
+        HttpURLConnection connection;
+        URL url = new URL("http://192.168.1.131/api/MnmoqKgwvdO2GrdVZ1TTHSyVN5amy4W6uuJcTbEF/config");
+        connection = (HttpURLConnection) url.openConnection();
+        connection.connect();
+        InputStream stream = connection.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuffer br = new StringBuffer();
+        String line = " ";
+        while ((line = reader.readLine()) != null) {
+            br.append(line);
+        }
+        String output = br.toString();
+        Date curDate = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String DateToStr = format.format(curDate);
+
+        JSONObject jsonObject = new JSONObject(output);
+        Object whitelistObject = jsonObject.get("whitelist");
+        whiteListString = whitelistObject.toString();
+
+        parts = whiteListString.split("}");
+        for(int i =0;i<parts.length;i++){
+            if(parts[i].contains("ifttt")){
+                counter++;
+                WLname = parts[i].substring(2,42);
+                System.out.println(WLname);
+                URL url1 = new URL("http://192.168.1.131/api/MnmoqKgwvdO2GrdVZ1TTHSyVN5amy4W6uuJcTbEF/config/whitelist/"+WLname);
+                HttpURLConnection httpCon = (HttpURLConnection) url1.openConnection();
+                httpCon.setDoOutput(true);
+                httpCon.setRequestMethod("DELETE");
+                OutputStreamWriter out = new OutputStreamWriter(
+                        httpCon.getOutputStream());
+                System.out.println(httpCon.getResponseCode());
+                System.out.println(httpCon.getResponseMessage());
+                out.close();
+//                }
+
+            }
+        }
 
 //Opening IFTTT app by clicking on different welcome screens
         driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);

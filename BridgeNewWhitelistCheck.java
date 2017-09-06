@@ -39,7 +39,7 @@ public class BridgeNewWhitelistCheck {
 
     public void BridgeCheckForNewWhiteList(String fileName, String APIVersion, String SWVersion) throws JSONException, IOException {
         HttpURLConnection connection;
-        URL url = new URL("http://192.168.86.23/api/yVqFoICUnIFDpxpGUCmXnHtAnv2sd1DJJ5LLHcGo/config");
+        URL url = new URL("http://192.168.1.131/api/MnmoqKgwvdO2GrdVZ1TTHSyVN5amy4W6uuJcTbEF/config");
         connection = (HttpURLConnection)url.openConnection();
 
         connection.connect();
